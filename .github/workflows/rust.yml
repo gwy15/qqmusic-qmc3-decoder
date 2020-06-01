@@ -1,10 +1,6 @@
 name: Rust
 
-on:
-  push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
+on: [push, pull_request]
 
 env:
   CARGO_TERM_COLOR: always
@@ -20,7 +16,18 @@ jobs:
       run: cargo build --verbose --release
     - name: Run tests
       run: cargo test --verbose
+    - name: Build Windows binary
+      run: |
+        apt install -y mingw-w64
+        rustup target add x86_64-pc-windows-gnu
+        cargo build --release --target x86_64-pc-windows-gnu
+    # make release
+    - name: Collect build
+      run: |
+        mkdir -p build
+        mv target/release/qqmusic-qmc3-decoder build/linux-decoder
+        mv target/x86_64-pc-windows-gnu/release/qqmusic-qmc3-decoder.exe build/windows-decoder.exe
     - uses: actions/upload-artifact@v2
       with:
         name: qqmusic-qmc3-decoder
-        path: target/release/qqmusic-qmc3-decoder
+        path: build/
