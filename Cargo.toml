@@ -1,0 +1,10 @@
+[package]
+name = "qqmusic-qmc3-decoder"
+version = "0.1.0"
+authors = ["gwy15 <gwy15thu@gmail.com>"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+glob = "0.3.0"
