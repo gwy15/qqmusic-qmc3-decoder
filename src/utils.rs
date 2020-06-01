@@ -1,7 +1,7 @@
 use std::fs::File;
 use std::io::{Read, Result, Write};
 
-const BUFFER_SIZE: usize = 8192;
+const BUFFER_SIZE: usize = 1 << 20; // 1M
 
 fn get_xor_mask(mut pos: usize) -> u8 {
     // Refer: https://github.com/MegrezZhu/qmcdump/blob/master/src/crypt.cpp
@@ -39,7 +39,7 @@ fn decode(buffer: &mut [u8], offset: usize) {
 
 pub fn decode_file(mut fin: File, mut fout: File) -> Result<()> {
     let mut offset = 0;
-    let mut buffer = [0; BUFFER_SIZE];
+    let mut buffer = vec![0; BUFFER_SIZE];
 
     loop {
         let read_length = fin.read(&mut buffer)?;
@@ -47,7 +47,7 @@ pub fn decode_file(mut fin: File, mut fout: File) -> Result<()> {
             break;
         }
         decode(&mut buffer[..read_length], offset);
-        fout.write(&buffer)?;
+        fout.write(&buffer[..read_length])?;
         offset += read_length;
     }
     Ok(())
