@@ -18,9 +18,9 @@ jobs:
       run: cargo test --verbose
     - name: Build Windows binary
       run: |
-        # sudo apt install -y mingw-w64
+        sudo apt install -y mingw-w64
         rustup target add x86_64-pc-windows-gnu
-        cargo build --release --target x86_64-pc-windows-gnu
+        cargo build --verbose --release --target x86_64-pc-windows-gnu
     # make release
     - name: Collect build
       run: |
